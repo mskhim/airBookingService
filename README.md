@@ -5,11 +5,24 @@
 ## 🗓 제작 기간 
 - 2024년 11월 28일 ~ 12월 1일
 
-## 🛠 개발 환경
-- `Java`
-- `JDK-21.0.4`
-- **IDE** : Eclipse
-- **Database** : Oracle DB(11g Express Edition)
+### 🛠 개발 환경
+#### 언어 및 플랫폼
+- **Java**
+  - JDK 21.0.4
+  - Eclipse IDE
+
+#### 데이터베이스
+- **Oracle DB**
+  - 버전: 21c Express Edition
+  - SQL Developer로 관리 및 쿼리 작업 수행
+
+#### 사용 도구
+- **SQL Developer**
+  - Oracle DB를 위한 공식 도구로, SQL 쿼리 작성 및 데이터베이스 관리에 사용됩니다.
+  - 다운로드: [Oracle SQL Developer 공식 사이트](https://www.oracle.com/database/sqldeveloper/)
+
+---
+
 
 ## 📌주요 기능
 1. 사용자가 항공편 예약을 쉽게 할 수 있는 시스템 구현
