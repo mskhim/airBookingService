@@ -30,7 +30,8 @@
 - 좌석 예매 화면
 
   
-![image1](https://github.com/user-attachments/assets/b1bdd8aa-9f2b-48c7-b0b3-9106ef27d81c)
+![image](https://github.com/user-attachments/assets/1e9522a9-e613-4123-9843-c03d66f89121)
+
 
 ## :grey_exclamation: ERD 
 ![image](https://github.com/user-attachments/assets/1283b7de-7ded-4f93-8447-6941cc31487a)
@@ -74,7 +75,7 @@
         X1 NUMBER;
         X2 NUMBER;
     BEGIN
-        FOR i IN 0 .. :NEW.ROWX - 1 LOOP
+        FOR i IN 1 .. :NEW.ROWX - 1 LOOP
             FOR j IN 1 .. :NEW.COLY LOOP
                 X1 := ASCII('A') + TRUNC(i / 26);
                 X2 := ASCII('A') + MOD(i, 26);
