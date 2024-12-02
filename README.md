@@ -17,6 +17,10 @@
 3. 사용자와 관리자가 모두 사용할 수 있는 직관적인 UI 제공
 4. **MVC 아키텍처**를 통한 코드 구조화
 
+## :grey_exclamation: ERD 
+![image](https://github.com/user-attachments/assets/1283b7de-7ded-4f93-8447-6941cc31487a)
+
+
 ## 💻 실행화면
 **1. 로그인 화면**
 <details>
@@ -85,8 +89,6 @@
 
 </details>
 
-## :grey_exclamation: ERD 
-![image](https://github.com/user-attachments/assets/1283b7de-7ded-4f93-8447-6941cc31487a)
 
 ## 🚧 **핵심 트러블 슈팅**
 
