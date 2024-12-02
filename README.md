@@ -5,12 +5,6 @@
 ## 🗓 제작 기간 
 - 2024년 11월 28일 ~ 12월 1일
 
-## 👬 참여 인원
- - 팀장  : 김민석 -  통합 구현 및 형상관리
- - 팀원1 : 문정배 - 항공편 데이터(CRUD), 국가 간 비행거리 및 소요시간 자동 계산 트리거 구현
- - 팀원2 : 박소현 - 관리자 모드 로그인, 로그인, 회원가입, ID찾기
- - 팀원3 : 장표 - 여객기 데이터(CRUD), 여행국 데이터(CRUD), MenuViewer 디자인, 형상관리 및 README.md 작성
-
 ## 🛠 개발 환경
 - `Java`
 - `JDK-21.0.4`
@@ -171,3 +165,30 @@
     JOIN PLANE P ON P.NO = F.PLANE_NO;
     /
     ```
+ 
+    
+    - 항공편 출력시 잔여좌석 출력을 위해 left Join과 inner조인을 사용한 'FLIGHT_COUNTRY_JOIN_VIEW' 뷰 작성
+    - 뷰 정의 코드 :
+      ```sql
+      CREATE OR REPLACE VIEW FLIGHT_COUNTRY_JOIN_VIEW AS
+SELECT F.NO,REMAIN, F.PLANE_NO,F.ARRIVAL_COUNTRY_NO, F.DEPARTURE_COUNTRY_NO, C.NAME AS ARVNAME,C2.NAME AS DEPNAME,F.PRICE, F.DEPARTURE_HOUR,F.ARRIVAL_HOUR 
+FROM FLIGHT F 
+LEFT JOIN COUNTRY C 
+ON C.NO=F.ARRIVAL_COUNTRY_NO 
+LEFT JOIN COUNTRY C2 
+ON C2.NO=F.DEPARTURE_COUNTRY_NO
+JOIN (SELECT FNO, count(*) AS REMAIN
+FROM (
+    SELECT s.no AS sno, f.no AS fno
+    FROM seats s
+    INNER JOIN flight f
+    ON s.plane_no = f.plane_no
+    
+) j
+LEFT JOIN booking b
+ON b.seats_no = j.sno
+where code is null
+GROUP BY FNO)Q
+ON Q.FNO=F.NO;
+```
+ 
