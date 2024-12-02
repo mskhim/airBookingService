@@ -165,7 +165,6 @@
     JOIN PLANE P ON P.NO = F.PLANE_NO;
     /
     ```
- 
     
   - 항공편 출력시 잔여좌석과, 국가 이름 출력을 위해 left Join과 inner조인을 사용한 'FLIGHT_COUNTRY_JOIN_VIEW' 뷰 작성
   - 뷰 정의 코드 :
@@ -189,4 +188,15 @@
      GROUP BY FNO)Q
      ON Q.FNO=F.NO;
      ```
- 
+
+   - 현재 좌석 출력시 항공편 번호를 입력받아 해당 항공편의 좌석 예매 현황을 출력하기위한 쿼리문 추가
+   - Booking, Seats , Plane 테이블을 조인, Booking의 SEATS_NO 컬럼과 Seats 의 NO 컬럼을 기준으로 JOIN하여 예매 현황 출력 가능하게 함. 
+   - 쿼리문 정의 코드 :
+     ```java
+	   private final String SELECT_BY_FLIGHT_SQL = "SELECT S.ROWX,S.COLY,CUSTOMER_NO,CODE,GROUP_NO,P.COLY AS YNUM FROM SEATS S LEFT JOIN BOOKING B \r\n"
+		 + "ON S.NO = B.SEATS_NO \r\n"
+		 + "JOIN PLANE P \r\n"
+		 + "ON P.NO = S.PLANE_NO\r\n"
+	   + "WHERE S.PLANE_NO = (SELECT PLANE_NO FROM FLIGHT WHERE NO = TO_CHAR(?,'FM00000'))\r\n"
+		 + "ORDER BY ROWX, TO_NUMBER(COLY)";
+     ```
