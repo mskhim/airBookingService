@@ -87,7 +87,12 @@
 ![좌석 예매](https://github.com/user-attachments/assets/1e9522a9-e613-4123-9843-c03d66f89121)  
 
 - 예약 가능 좌석 목록 제공  
-- 이미 예약된 좌석은 선택 불가  
+- 이미 예약된 좌석은 선택 불가
+
+![image](https://github.com/user-attachments/assets/db3c396d-e7d3-4987-a9d9-a82ed24ebe57)
+
+- 예매 완료시 동적으로 잔여 좌석 변경
+  
 
 #### (2) **예약 내역 조회 및 관리**  
 ![예매 내역](https://github.com/user-attachments/assets/2aac652d-2a18-4a32-bda8-d2f1f70e3be3)  
