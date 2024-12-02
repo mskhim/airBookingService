@@ -18,21 +18,99 @@
 4. **MVC 아키텍처**를 통한 코드 구조화
 
 ## 💻 실행화면
-- 로그인 화면
-
+**1. 로그인 화면**
+<details>
   
-![캡처](https://github.com/user-attachments/assets/4724d8c5-348e-466d-a3e4-93911eff845a)
+![image](https://github.com/user-attachments/assets/03b9408c-3760-448d-bd8f-25971056ef51)
 
-- 항공편 예매 화면
+  - 관리자계정 로그인 화면
 
+  ![image](https://github.com/user-attachments/assets/647f0d7f-83b2-4076-96f2-ded01dc87ee0)
 
-![항공편](https://github.com/user-attachments/assets/8027e285-ef28-4d72-b3e8-4643aa5fbeec)
-- 좌석 예매 화면
+  - 일반계정 로그인 화면
 
+  ![image](https://github.com/user-attachments/assets/db71069a-c7c6-4be2-a46b-27ecf35bc72c)
+
+   - 일반계정과 관리자계정을 분리하여 로그인시 다른 화면이 나올수 있도록 구성하였음.
+   - 일반계정은 전체 항공편 조회 이외에는 자기자신의 대한 정보 조회와 예매, 취소만 가능
+   - 관리자 계정은 모든 데이터에대한 CURD 권한을 부여
+
+</details>
+
+**2. 항공편 예매 화면**
+<details>
+
+![항공편](https://github.com/user-attachments/assets/26a40667-4faa-47d4-8309-a92da65508a6)
+
+- 일반고객 로그인 후, 이용가능한 항공편 조회시 현재 등록된 항공편 정보와 잔여좌석이 출력
+- 잔여좌석같은 경우엔 join과 group by와 count를 사용해 view를 추가하여 데이터값을 뽑아냈음
+
+</details>
+
+**3. 좌석 예매 화면**
+<details>
   
 ![image](https://github.com/user-attachments/assets/1e9522a9-e613-4123-9843-c03d66f89121)
 
-
+- 좌석예매같은 경우는 원하는 항공편을 입력시 해당 항공편의 잔여 좌석을 출력해서 원하는 좌석의 코드를 입력받을수 있게 만들었음
+- 좌석입력같은경우에는 이미 예매된 좌석 선택시 선택 불가능하게 하는 기능 추가.
+  ```
+  	public boolean selectRightSeatDB(BookingVO bvo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		boolean checkFlag = false;
+		con = DBUtility.dbCon();
+		try {
+			pstmt = con.prepareStatement(SELECT_BY_FLIGHT_SQL);
+			pstmt.setString(1, bvo.getFlightNo());
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String rowx = rs.getString("ROWX");
+				String coly = rs.getString("COLY");
+				String code = rs.getString("CODE");
+				if (code == null && (rowx+coly).equals(bvo.getSeat())) {
+					checkFlag = true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		DBUtility.dbClose(con, rs, pstmt);
+		return checkFlag;
+	}
+  ```
+  ```
+  private ArrayList<BookingVO> selectSeatCheckManager(BookingVO bvo) {
+		SeatsDAO sDAO = new SeatsDAO();
+		ArrayList<BookingVO> bvoList = new ArrayList<BookingVO>();
+		ArrayList<String> sList = new ArrayList<String>();
+		int count = 0;
+		while (count < bvo.getAmount()) {
+			System.out.println("예매를 원하는 좌석을 선택해주세요.");
+			System.out.print(">> ");
+			String seat = sc.nextLine();
+			BookingVO nbvo = new BookingVO(bvo.getCustomerNo(), bvo.getFlightNo(), seat);
+			bvo.setSeat(seat);
+			boolean flag = sDAO.selectRightSeatDB(nbvo);
+			for(String data : sList) {
+				if(data.equals(seat)) {
+					flag = false;
+				}
+			}
+			sList.add(seat);
+			if (flag) {
+				bvoList.add(nbvo); // 새로운 객체를 리스트에 추가
+				count++;
+				System.out.println(">> 예매가 가능한 좌석입니다.");
+			} else {
+				System.out.println(">> 예매가 불가능한 좌석입니다.");
+			}
+		}
+		return bvoList;
+	}
+  ```
+</details>
 ## :grey_exclamation: ERD 
 ![image](https://github.com/user-attachments/assets/1283b7de-7ded-4f93-8447-6941cc31487a)
 
