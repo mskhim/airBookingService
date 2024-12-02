@@ -167,28 +167,26 @@
     ```
  
     
-    - 항공편 출력시 잔여좌석 출력을 위해 left Join과 inner조인을 사용한 'FLIGHT_COUNTRY_JOIN_VIEW' 뷰 작성
-    - 뷰 정의 코드 :
-      ```sql
-      CREATE OR REPLACE VIEW FLIGHT_COUNTRY_JOIN_VIEW AS
-SELECT F.NO,REMAIN, F.PLANE_NO,F.ARRIVAL_COUNTRY_NO, F.DEPARTURE_COUNTRY_NO, C.NAME AS ARVNAME,C2.NAME AS DEPNAME,F.PRICE, F.DEPARTURE_HOUR,F.ARRIVAL_HOUR 
-FROM FLIGHT F 
-LEFT JOIN COUNTRY C 
-ON C.NO=F.ARRIVAL_COUNTRY_NO 
-LEFT JOIN COUNTRY C2 
-ON C2.NO=F.DEPARTURE_COUNTRY_NO
-JOIN (SELECT FNO, count(*) AS REMAIN
-FROM (
-    SELECT s.no AS sno, f.no AS fno
-    FROM seats s
-    INNER JOIN flight f
-    ON s.plane_no = f.plane_no
-    
-) j
-LEFT JOIN booking b
-ON b.seats_no = j.sno
-where code is null
-GROUP BY FNO)Q
-ON Q.FNO=F.NO;
-```
+  - 항공편 출력시 잔여좌석과, 국가 이름 출력을 위해 left Join과 inner조인을 사용한 'FLIGHT_COUNTRY_JOIN_VIEW' 뷰 작성
+  - 뷰 정의 코드 :
+     ```sql
+     CREATE OR REPLACE VIEW FLIGHT_COUNTRY_JOIN_VIEW AS
+     SELECT F.NO,REMAIN, F.PLANE_NO,F.ARRIVAL_COUNTRY_NO, F.DEPARTURE_COUNTRY_NO, C.NAME AS ARVNAME,C2.NAME AS DEPNAME,F.PRICE, F.DEPARTURE_HOUR,F.ARRIVAL_HOUR 
+     FROM FLIGHT F 
+     LEFT JOIN COUNTRY C 
+     ON C.NO=F.ARRIVAL_COUNTRY_NO 
+     LEFT JOIN COUNTRY C2 
+     ON C2.NO=F.DEPARTURE_COUNTRY_NO
+     JOIN (SELECT FNO, count(*) AS REMAIN
+     FROM (
+     SELECT s.no AS sno, f.no AS fno
+     FROM seats s
+     INNER JOIN flight f
+     ON s.plane_no = f.plane_no ) j
+     LEFT JOIN booking b
+     ON b.seats_no = j.sno
+     where code is null
+     GROUP BY FNO)Q
+     ON Q.FNO=F.NO;
+     ```
  
