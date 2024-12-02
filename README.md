@@ -37,80 +37,54 @@
 
 </details>
 
-**2. 항공편 예매 화면**
+**2. 항공편 조회 화면**
 <details>
 
 ![항공편](https://github.com/user-attachments/assets/26a40667-4faa-47d4-8309-a92da65508a6)
 
-- 일반고객 로그인 후, 이용가능한 항공편 조회시 현재 등록된 항공편 정보와 잔여좌석이 출력
-- 잔여좌석같은 경우엔 join과 group by와 count를 사용해 view를 추가하여 데이터값을 뽑아냈음
+- 로그인 전, 이용가능한 항공편 조회시 현재 등록된 항공편 정보와 잔여좌석이 출력될수 있도록 구현
+- 잔여좌석같은 경우엔 join과 group by와 count를 사용해 view를 추가하여 데이터를 출력하도록 구현
 
 </details>
 
-**3. 좌석 예매 화면**
+**3. 고객 로그인 화면**
 <details>
-  
+ 1. 좌석예매
 ![image](https://github.com/user-attachments/assets/1e9522a9-e613-4123-9843-c03d66f89121)
 
-- 좌석예매같은 경우는 원하는 항공편을 입력시 해당 항공편의 잔여 좌석을 출력해서 원하는 좌석의 코드를 입력받을수 있게 만들었음
-- 좌석입력같은경우에는 이미 예매된 좌석 선택시 선택 불가능하게 하는 기능 추가.
-  ```
-  	public boolean selectRightSeatDB(BookingVO bvo) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		boolean checkFlag = false;
-		con = DBUtility.dbCon();
-		try {
-			pstmt = con.prepareStatement(SELECT_BY_FLIGHT_SQL);
-			pstmt.setString(1, bvo.getFlightNo());
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				String rowx = rs.getString("ROWX");
-				String coly = rs.getString("COLY");
-				String code = rs.getString("CODE");
-				if (code == null && (rowx+coly).equals(bvo.getSeat())) {
-					checkFlag = true;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		DBUtility.dbClose(con, rs, pstmt);
-		return checkFlag;
-	}
-  ```
-  ```
-  private ArrayList<BookingVO> selectSeatCheckManager(BookingVO bvo) {
-		SeatsDAO sDAO = new SeatsDAO();
-		ArrayList<BookingVO> bvoList = new ArrayList<BookingVO>();
-		ArrayList<String> sList = new ArrayList<String>();
-		int count = 0;
-		while (count < bvo.getAmount()) {
-			System.out.println("예매를 원하는 좌석을 선택해주세요.");
-			System.out.print(">> ");
-			String seat = sc.nextLine();
-			BookingVO nbvo = new BookingVO(bvo.getCustomerNo(), bvo.getFlightNo(), seat);
-			bvo.setSeat(seat);
-			boolean flag = sDAO.selectRightSeatDB(nbvo);
-			for(String data : sList) {
-				if(data.equals(seat)) {
-					flag = false;
-				}
-			}
-			sList.add(seat);
-			if (flag) {
-				bvoList.add(nbvo); // 새로운 객체를 리스트에 추가
-				count++;
-				System.out.println(">> 예매가 가능한 좌석입니다.");
-			} else {
-				System.out.println(">> 예매가 불가능한 좌석입니다.");
-			}
-		}
-		return bvoList;
-	}
-  ```
+- 좌석예매같은 경우는 원하는 항공편을 입력시 해당 항공편의 잔여 좌석을 출력해서 원하는 좌석의 코드를 입력받을수 있게 구현
+- 좌석입력같은경우에는 이미 예매된 좌석 선택시 선택 불가능하게 하는 기능 구현
+2. 예매내역 조회
+
+ ![image](https://github.com/user-attachments/assets/2aac652d-2a18-4a32-bda8-d2f1f70e3be3)
+
+- 현재 자신의 예매내역을 출력, 예매한 좌석도 테이블을 join해서 출력 가능하도록 구현
+- 해당화면에서 예매 취소 및 변경 가능
+
+3. 마이페이지
+
+
+![image](https://github.com/user-attachments/assets/799c3f23-95ce-4f1b-a9f1-3e512bde5bb3)
+
+- 마이페이지 화면 출력시 개인 회원정보를 출력해주고 해당정보에 대해서 수정과 회원 탈퇴 기능 구현
+
+ 
 </details>
+
+**4. 관리자 계정 로그인화면** 
+
+<details>
+- 관리자계정 CURD 화면
+	
+![image](https://github.com/user-attachments/assets/37992032-a4f9-461c-9dd9-03ef09840d79)
+- 관리자계정에서는 고객, 여객기, 국가, 항공편, 예매현황에 대한 모든 데이터에 대해서 CURD가 가능하도록 구현
+
+![image](https://github.com/user-attachments/assets/523e0975-dc03-459c-9b87-0ff933855400)
+- 고객정보 이외에도 모든 정보 관리 가능.
+- 고객정보에 한하여 추가로 관리자 권한을 부여하거나 회수하는 기능도 구현
+
+</details>
+
 ## :grey_exclamation: ERD 
 ![image](https://github.com/user-attachments/assets/1283b7de-7ded-4f93-8447-6941cc31487a)
 
